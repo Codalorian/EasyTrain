@@ -1,0 +1,7 @@
+ GNU nano 8.5                                      requirements.py                                      Modified  
+transformers
+datasets
+peft
+accelerate
+
+
