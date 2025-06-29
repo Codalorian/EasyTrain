@@ -39,7 +39,7 @@
 |------------------|--------------------------------------|
 | OS               | Linux/macOS/Windows (Linux preferred) |
 | Python           | 3.8+                                |
-| GPU (Optional)   | CUDA-capable NVIDIA GPU (for speed) |
+| GPU (Optional)   | CUDA-capable NVIDIA GPU (for speed), or AMD ROCm-capable GPU |
 | Disk Space       | 20GB+ for models (varies by model)   |
 
 **Note:** AMD ROCm support only available on Linux.
