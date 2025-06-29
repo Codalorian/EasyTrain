@@ -56,10 +56,13 @@ chmod +x autoinstall.sh
 
 # Run installer
 ./autoinstall.sh
+```
 
 🪟 Windows
 
-    Currently no AMD GPU support. For NVIDIA GPUs:
+**Currently no AMD GPU support. For NVIDIA GPUs:**
+
+```bash
 
 # Install CUDA dependencies manually
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
@@ -67,15 +70,23 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 # Install EasyTrain dependencies
 pip install transformers datasets accelerate peft
 
+```
+
 🚀 Quick Start
-Run a Model
+**Run a Model**
+
+```bash
 
 python3 EasyTrain.py runlm \
   --model meta-llama/Llama-2-7b-hf \
   --prompt "Explain quantum computing in simple terms" \
   --stream
 
-Train with LoRA
+```
+
+**Train with LoRA**
+
+```bash
 
 python3 EasyTrain.py trainlm \
   --model meta-llama/Llama-2-7b-hf \
@@ -85,7 +96,9 @@ python3 EasyTrain.py trainlm \
   --lora-alpha 128 \
   --output-dir ./fine_tuned_model
 
-📦 CLI Arguments
+```
+
+**📦 CLI Arguments**
 runlm Mode (Inference)
 Argument 	Default 	Description
 --model 	REQUIRED 	Model name/path
@@ -114,9 +127,9 @@ EasyTrain/
 
 📚 Credits
 
-    Built with 🧠 HuggingFace Transformers
-    Optimized with 🔧 PEFT (LoRA)
-    Streamed with 📡 TextStreamer
+Built with 🧠 HuggingFace Transformers
+Optimized with 🔧 PEFT (LoRA)
+Streamed with 📡 TextStreamer
 
 📜 License
 
@@ -125,10 +138,138 @@ MIT License - See LICENSE for details
 
 Contributions are welcome! Whether you want to:
 
-    Add Windows AMD support when available
-    Improve dataset format detection
-    Add new training features
-    Optimize inference speed
+Add Windows AMD support when available
+Improve dataset format detection
+Add new training features
+Optimize inference speed
+
+**COMMON ISSUES**
+
+1) When running autoinstall.sh, the script might sometimes falsely detect a gpu (at least on my laptop) which I have not found a way around yet but here is the fix, if you run cpu only:
+For apt:
+
+```bash
+sudo apt install python3 python3-pip
+pip3 install -r requirements.txt && pip3 install torch (--break-system-requirements flag if needed)
+```
+dnf:
+
+```bash
+sudo dnf install python3 python3-pip
+pip3 install -r requirements.txt && pip3 install torch (--break-system-requirements flag if needed)
+```
+yum:
+
+```bash
+sudo yum install python3 python3-pip
+pip3 install -r requirements.txt && pip3 install torch (--break-system-requirements flag if needed)
+```
+pacman:
+
+```bash
+sudo pacman -Syu install python3 python3-pip
+pip3 install -r requirements.txt && pip3 install torch (--break-system-requirements flag if needed)
+```
+
+MacOS:
+
+```bash
+brew install python
+pip3 install -r requirements.txt && pip3 install torch (--break-system-requirements flag if needed)
+```
+2) Sometimes AMD ROCm fails to install due to bad requests and stuff. It may also happen if you are using a lesser known distro like Oracle Linux or Azure Linux. To install fresh ROCm:
+
+Ubuntu 24.04:
+
+```bash
+wget https://repo.radeon.com/amdgpu-install/6.4.1/ubuntu/noble/amdgpu-install_6.4.60401-1_all.deb
+sudo apt install ./amdgpu-install_6.4.60401-1_all.deb
+sudo apt update
+sudo apt install python3-setuptools python3-wheel
+sudo usermod -a -G render,video $LOGNAME # Add the current user to the render and video groups
+sudo apt install rocm
+```
+Ubuntu 22.04:
+```bash
+wget https://repo.radeon.com/amdgpu-install/6.4.1/ubuntu/jammy/amdgpu-install_6.4.60401-1_all.deb
+sudo apt install ./amdgpu-install_6.4.60401-1_all.deb
+sudo apt update
+sudo apt install python3-setuptools python3-wheel
+sudo usermod -a -G render,video $LOGNAME # Add the current user to the render and video groups
+sudo apt install rocm
+```
+Debian 12:
+```bash
+wget https://repo.radeon.com/amdgpu-install/6.4.1/ubuntu/jammy/amdgpu-install_6.4.60401-1_all.deb
+sudo apt install ./amdgpu-install_6.4.60401-1_all.deb
+sudo apt update
+sudo apt install -y python3-setuptools python3-wheel
+sudo usermod -a -G render,video $LOGNAME # Add the current user to the render and video groups
+sudo apt install rocm
+```
+Red Hat 9.6:
+```bash
+sudo dnf install https://repo.radeon.com/amdgpu-install/6.4.1/rhel/9.6/amdgpu-install-6.4.60401-1.el9.noarch.rpm
+sudo dnf clean all
+wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+sudo rpm -ivh epel-release-latest-9.noarch.rpm
+sudo dnf install dnf-plugin-config-manager
+sudo crb enable
+sudo dnf install python3-setuptools python3-wheel
+sudo usermod -a -G render,video $LOGNAME # Add the current user to the render and video groups
+sudo dnf install rocm
+```
+Red Hat 9.5:
+```bash
+sudo dnf install https://repo.radeon.com/amdgpu-install/6.4.1/rhel/9.5/amdgpu-install-6.4.60401-1.el9.noarch.rpm
+sudo dnf clean all
+sudo dnf install "kernel-headers-$(uname -r)" "kernel-devel-$(uname -r)" "kernel-devel-matched-$(uname -r)"
+sudo dnf install amdgpu-dkms
+```
+Red Hat 9.4:
+```bash
+sudo dnf install https://repo.radeon.com/amdgpu-install/6.4.1/rhel/9.4/amdgpu-install-6.4.60401-1.el9.noarch.rpm
+sudo dnf clean all
+sudo dnf install "kernel-headers-$(uname -r)" "kernel-devel-$(uname -r)" "kernel-devel-matched-$(uname -r)"
+sudo dnf install amdgpu-dkms
+```
+Red Hat 8.10
+```bash
+sudo dnf install https://repo.radeon.com/amdgpu-install/6.4.1/rhel/8.10/amdgpu-install-6.4.60401-1.el8.noarch.rpm
+sudo dnf clean all
+sudo dnf install "kernel-headers-$(uname -r)" "kernel-devel-$(uname -r)"
+sudo dnf install amdgpu-dkms
+```
+Oracle Linux
+```bash
+sudo dnf install https://repo.radeon.com/amdgpu-install/6.4.1/el/9.5/amdgpu-install-6.4.60401-1.el9.noarch.rpm
+sudo dnf clean all
+sudo dnf install "kernel-uek-devel-$(uname -r)"
+sudo dnf install amdgpu-dkms
+```
+SUSE
+```bash
+sudo SUSEConnect -p sle-module-desktop-applications/15.6/x86_64
+sudo SUSEConnect -p sle-module-development-tools/15.6/x86_64
+sudo SUSEConnect -p PackageHub/15.6/x86_64
+sudo zypper install zypper
+sudo zypper --no-gpg-checks install https://repo.radeon.com/amdgpu-install/6.4.1/sle/15.6/amdgpu-install-6.4.60401-1.noarch.rpm
+sudo zypper --gpg-auto-import-keys refresh
+sudo zypper install kernel-default-devel
+sudo zypper install amdgpu-dkms
+```
+Azure Linux
+```bash
+sudo tdnf install "kernel-headers-$(uname -r)" "kernel-devel-$(uname -r)"
+sudo tdnf install azurelinux-repos-amd
+sudo tdnf repolist --refresh
+sudo tdnf install amdgpu
+```
+
+Then install PyTorch for ROCm:
+```bash
+ pip3 install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.4/
+```
 
 Just fork and submit a PR!
 📬 Feedback
