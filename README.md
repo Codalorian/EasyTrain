@@ -276,4 +276,4 @@ Just fork and submit a PR!
 
 Have ideas to make this simpler? Found a bug?
 Open an issue or PR on GitHub!
-```
+
